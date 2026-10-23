@@ -19,15 +19,21 @@ document.querySelectorAll('[data-photo]').forEach(container => {
   container.replaceChildren(img);
 });
 const makeLegalLink = (title, url) => {
-  const el = document.createElement(validUrl(url) ? 'a' : 'span');
+  const resolved = url ? new URL(url, location.origin) : null;
+  const available = resolved && (resolved.protocol === 'https:' || (resolved.protocol === 'http:' && resolved.origin === location.origin));
+  const el = document.createElement(available ? 'a' : 'span');
   el.textContent = title;
-  if (validUrl(url)) { el.href = url; el.target = '_blank'; el.rel = 'noopener noreferrer'; }
+  if (available) { el.href = url; el.target = '_blank'; el.rel = 'noopener noreferrer'; }
   else { el.className = 'unavailable'; el.title = 'Документ ещё не предоставлен'; }
   return el;
 };
 const legal = document.querySelector('#legal-links');
 legal.append(makeLegalLink('Публичная оферта', config.offerUrl), makeLegalLink('Политика конфиденциальности', config.privacyUrl));
 document.querySelector('#business').textContent = config.businessDetails || 'Данные ИП ещё не предоставлены';
+if (config.contactEmail) {
+  const contact = document.createElement('a'); contact.href = `mailto:${config.contactEmail}`; contact.textContent = config.contactEmail;
+  document.querySelector('#business').append(document.createElement('br'), contact);
+}
 document.querySelectorAll('.legal-note').forEach(note => {
   note.append('Оплачивая участие, вы соглашаетесь с ', makeLegalLink('офертой', config.offerUrl), ' и ', makeLegalLink('политикой конфиденциальности', config.privacyUrl), '.');
 });
