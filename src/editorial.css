@@ -70,3 +70,5 @@ h1{font-size:clamp(64px,7vw,104px);line-height:1.08;letter-spacing:-.055em}
  .hero .photo-tag{bottom:-8px;padding:14px 18px}
  .hero-sub{order:5}.hero-description{order:6}.hero .buy{order:7}.hero .legal-note{order:8}
 }
+#business{overflow-wrap:anywhere}
+@media(max-width:650px){#business{flex-basis:100%;max-width:none;font-size:11px;line-height:1.8}#legal-links{font-size:11px}}
